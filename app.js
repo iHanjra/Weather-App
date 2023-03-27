@@ -1,5 +1,7 @@
 const form = document.querySelector("form");
 const main = document.querySelector("main");
+const upcomingWeather = document.querySelector("aside");
+const searches = document.querySelector("sidebar");
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -13,10 +15,12 @@ form.addEventListener("submit", (event) => {
   fetch(api_url)
     .then((response) => response.json())
     .then((json) => {
-        //Grab current weather in Fahrenheit
-      currentweather = json.current_condition[0].FeelsLikeF;
+        const weatherData = json;
+        
+    //Grab current weather in Fahrenheit
+      currentweather = weatherData.current_condition[0].FeelsLikeF;
       
-        const {
+      const {
         nearest_area: [
           {
             region: [{ value: region }],
@@ -24,19 +28,41 @@ form.addEventListener("submit", (event) => {
             areaName: [{ value: areaName }],
           },
         ],
-      } = json;
-
+      } = weatherData;
 
       main.innerHTML = `
-        <article class="currentweather">
-          <h2>${location}</h2>
-          
+        <h2>${areaName}</h2>
         <p><strong>Area:</strong> ${areaName}</p>
         <p><strong>Region:</strong> ${region}</p>
         <p><strong>Country:</strong> ${country}</p>
         <p><strong>Currently:</strong> Feels Like ${currentweather}°F</p>
-        </article>
       `;
+
+      upcomingWeather.innerHTML = `
+      <article>
+      <h3>Today</h3>
+        <p><strong>Average Temperature:</strong> ${weatherData.weather[0].avgtempF}°F</p>
+        <p><strong>Max Temperature:</strong> ${weatherData.weather[0].maxtempF}°F</p>
+        <p><strong>Min Temperature:</strong> ${weatherData.weather[0].mintempF}°F</p>
+      </article>
+
+      <article>
+        <h3>Tomorrow</h3>
+        <p><strong>Average Temperature:</strong> ${weatherData.weather[1].avgtempF}°F</p>
+        <p><strong>Max Temperature:</strong> ${weatherData.weather[1].maxtempF}°F</p>
+        <p><strong>Min Temperature:</strong> ${weatherData.weather[1].mintempF}°F</p>
+      </article>   
+
+      <article>
+        <h3>Day After Tomorrow</h3>
+        <p><strong>Average Temperature:</strong> ${weatherData.weather[2].avgtempF}°F</p>
+        <p><strong>Max Temperature:</strong> ${weatherData.weather[2].maxtempF}°F</p>
+        <p><strong>Min Temperature:</strong> ${weatherData.weather[2].mintempF}°F</p>
+      </article>
+      `;
+
+      main.appendChild(upcomingWeather);
+
     })
 
 
