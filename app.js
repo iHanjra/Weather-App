@@ -20,9 +20,15 @@ form.addEventListener("submit", (event) => {
     .then((response) => response.json())
     .then((json) => {
         const weatherData = json;
+
         
     //Grab current weather in Fahrenheit
       currentweather = weatherData.current_condition[0].FeelsLikeF;
+
+    //Grab chances for precipitation
+      chanceOfSunshine = weatherData.weather[0].hourly[0].chanceofsunshine;
+      chanceOfRain = weatherData.weather[0].hourly[0].chanceofrain;
+      chanceOfSnow = weatherData.weather[0].hourly[0].chanceofsnow;
       
       const {
         nearest_area: [
@@ -35,12 +41,43 @@ form.addEventListener("submit", (event) => {
       } = weatherData;
 
       article.innerHTML = `
-        <h2>${areaName}</h2>
-        <p><strong>Area:</strong> ${areaName}</p>
+        <h2>${location}</h2>
+        <p class ="area"><strong>Area:</strong> ${areaName}</p>
         <p><strong>Region:</strong> ${region}</p>
         <p><strong>Country:</strong> ${country}</p>
         <p><strong>Currently:</strong> Feels Like ${currentweather}°F</p>
+        <p><strong>Chance of Sunshine:</strong> ${chanceOfSunshine}</p>
+        <p><strong>Chance of Rain:</strong> ${chanceOfRain}</p>
+        <p><strong>Chance of Snow:</strong> ${chanceOfSnow}</p>
       `;
+
+      const area = document.querySelector(".area");
+
+      if (location !== areaName) {
+      area.innerHTML = `
+      <p><strong>Nearest Area:</strong> ${areaName}</p>`;
+      }
+
+      // Create icon element based on chance data
+      const icon = document.createElement("img");
+      let iconSrc = "";
+      let altText = "";
+      if (chanceOfSunshine > 50) {
+        iconSrc = "assets/icons8-summer.gif";
+        altText = "sun";
+      } else if (chanceOfRain > 50) {
+        iconSrc = "assets/icons8-torrential-rain.gif";
+        altText = "rain";
+      } else if (chanceOfSnow > 50) {
+        iconSrc = "assets/icons8-light-snow.gif";
+        altText = "snow";
+      }
+      icon.src = iconSrc;
+      icon.alt = altText;
+
+      // Add icon element to top of article element
+      article.prepend(icon);
+
 
       upcomingWeather.innerHTML = `
       <article>
@@ -100,10 +137,10 @@ form.addEventListener("submit", (event) => {
 
       if (celsius) {
         const fTemp = ((temp - 32) * 5) / 9;
-        result.innerText = `${fTemp.toFixed(2)}`;
+        result.innerText = `${fTemp.toFixed(2)}°C Degrees Celsius`;
       } else if (fahrenheit) {
         const cTemp = (temp * 9) / 5 + 32;
-        result.innerText = `${cTemp.toFixed(2)}`;
+        result.innerText = `${cTemp.toFixed(2)}°F Degrees Fahrenheit`;
       }
     }
 
@@ -153,8 +190,6 @@ function renderSearchHistory() {
   }
 }
 
-
-
 function fetchWeatherData(query) {
   const api_url = `https://wttr.in/${query}?format=j1`;
 
@@ -177,12 +212,16 @@ function fetchWeatherData(query) {
       } = weatherData;
 
       article.innerHTML = `
-        <h2>${areaName}</h2>
-        <p><strong>Area:</strong> ${areaName}</p>
+        <h2>${location}</h2>
+        <p class ="area"><strong>Area:</strong> ${areaName}</p>
         <p><strong>Region:</strong> ${region}</p>
         <p><strong>Country:</strong> ${country}</p>
         <p><strong>Currently:</strong> Feels Like ${currentweather}°F</p>
+        <p><strong>Chance of Sunshine:</strong> ${chanceOfSunshine}</p>
+        <p><strong>Chance of Rain:</strong> ${chanceOfRain}</p>
+        <p><strong>Chance of Snow:</strong> ${chanceOfSnow}</p>
       `;
+
 
       upcomingWeather.innerHTML = `
       <article>
@@ -208,9 +247,6 @@ function fetchWeatherData(query) {
       `;
     
     })
-
-
-
 
     .catch((error) => {
       console.log(error);

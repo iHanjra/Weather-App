@@ -1,3 +1,8 @@
+html {
+	height:100%;
+	background: radial-gradient(circle, rgba(172,247,254,1) 0%, rgba(0,169,255,1) 100%);
+}
+
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	width: clamp(960px, 80%, 1280px);
@@ -5,7 +10,7 @@ body {
 	display: grid;
 	grid-template-areas:
     'header header header header header header'
-    'main main main main main sidebar';
+    'widget main main main main sidebar';
 	gap: 20px;
 }
 
@@ -51,10 +56,24 @@ main {
     grid-column: 2 / 5;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    grid-gap: 20px 0;
     text-align: center;
+}
+
+.upcomingweather article {
+    background-color: rgb(226, 224, 224);
+    border: 2px solid rgb(1, 110, 103);
+    padding: 40px;
 }
 
 .sidebar {
 	grid-area: sidebar;
+}
+
+.widget {
+    grid-area: widget;
+}
+
+input[type="submit"] {
+	background:#fff;
 }
