@@ -144,8 +144,8 @@ function fetchWeatherData(query) {
           return;
         }
 
-        if (celsius) result.innerText = `${(((temp - 32) * 5) / 9).toFixed(2)}`;
-        else result.innerText = `${((temp * 9) / 5 + 32).toFixed(2)}`;
+        if (celsius) result.innerText = `${(((temp - 32) * 5) / 9).toFixed(2)}°C`;
+        else result.innerText = `${((temp * 9) / 5 + 32).toFixed(2)}°F`;
       }
 
       const widgetForm = document.getElementById("widgetForm");
