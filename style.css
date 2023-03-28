@@ -22,7 +22,7 @@ h1 {
 	margin-top: 0;
 }
 
-h1, label{
+h1, .header form label{
     color: white;
 }
 
@@ -57,8 +57,4 @@ main {
 
 .sidebar {
 	grid-area: sidebar;
-}
-
-.widget {
-    grid-area: widget;
 }

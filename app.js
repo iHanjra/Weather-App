@@ -66,12 +66,12 @@ form.addEventListener("submit", (event) => {
       `;
 
       widget.innerHTML = `
-    <form>
+    <form id="widgetForm">
         <div>
         <label for="temp-to-convert">Convert the temperature:</label>
-            <select id="temp-to-convert" name="temp" type="number">
-                <option value="temperature">number</option>
-            </select>
+        </div>
+        <div>
+            <input id="temp-to-convert" type="number"></input>
         </div>
         <div>
             <label for="to-c">To Celsius</label>
@@ -85,7 +85,30 @@ form.addEventListener("submit", (event) => {
         <h4>0.00</h4>
     </form>
 `;
-    
+
+    function convertTemp(event) {
+      event.preventDefault();
+      const temp = document.getElementById("temp-to-convert").value;
+      const celsius = document.getElementById("to-c").checked;
+      const fahrenheit = document.getElementById("to-f").checked;
+      const result = document.querySelector("h4");
+
+      if (!celsius && !fahrenheit) {
+        result.innerText = "Please select a conversion option.";
+        return;
+      }
+
+      if (celsius) {
+        const fTemp = ((temp - 32) * 5) / 9;
+        result.innerText = `${fTemp.toFixed(2)}`;
+      } else if (fahrenheit) {
+        const cTemp = (temp * 9) / 5 + 32;
+        result.innerText = `${cTemp.toFixed(2)}`;
+      }
+    }
+
+    const widgetForm = document.getElementById("widgetForm");
+    widgetForm.addEventListener("submit", convertTemp);
       
 
       addSearchToHistory(location, currentweather);
@@ -129,6 +152,8 @@ function renderSearchHistory() {
     sidebarSection.appendChild(list);
   }
 }
+
+
 
 function fetchWeatherData(query) {
   const api_url = `https://wttr.in/${query}?format=j1`;
@@ -183,6 +208,8 @@ function fetchWeatherData(query) {
       `;
     
     })
+
+
 
 
     .catch((error) => {
